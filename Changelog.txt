@@ -1,5 +1,6 @@
 Changelog
 
+6.5.1
 	Fixed flashing screen when opening crew manifest right after launching
 	New Dependencies
 		ClickThroughBlocker
