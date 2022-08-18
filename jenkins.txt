@@ -34,9 +34,9 @@
 2:CrewManifest,CrewManifest/CrewManifest.csproj,CrewManifest.version,GameData/CrewManifest/Plugins
 
 # 3:SOURCEFILE, DESTDIR
-3:KerbalHotSeat.version,GameData/KerbalHotSeat
-#3:LICENSE.md,GameData/KerbalHotSeat
-#3:README.md,GameData/KerbalHotSeat
+3:KerbalHotSeat.version,GameData/CrewManifest
+#3:LICENSE.md,GameData/CrewManifest
+#3:README.md,GameData/CrewManifest
 
 # 4:SOURCDIR, DESTDIR
 #4:Textures,GameData/ManeuverQueue/Textures
