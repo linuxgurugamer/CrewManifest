@@ -1,0 +1,21 @@
+{
+  "NAME": "CrewManifest",
+  "URL": "http://ksp.spacetux.net/CrewManifest",
+  "DOWNLOAD": "https://forum.kerbalspaceprogram.com/index.php?/topic/55485-*",
+  "VERSION": {
+    "MAJOR": 6,
+    "MINOR": 5,
+    "PATCH": 1,
+    "BUILD": 0
+  },
+  "KSP_VERSION": {
+    "MAJOR": 1,
+    "MINOR": 12,
+    "PATCH": 0
+  },
+  "KSP_VERSION_MIN": {
+    "MAJOR": 1,
+    "MINOR": 10,
+    "PATCH": 0
+  }
+}

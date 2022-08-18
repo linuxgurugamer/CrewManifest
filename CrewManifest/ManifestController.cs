@@ -5,6 +5,9 @@ using System.Text;
 using Experience;
 using KSP.UI.Dialogs;
 using UnityEngine;
+using ClickThroughFix;
+
+using static CrewManifest.RegisterToolbar;
 
 namespace CrewManifest
 {
@@ -53,7 +56,8 @@ namespace CrewManifest
         {
             get
             {
-                return  Vessel.GetLandedAtString(Vessel.landedAt) == "LaunchPad" || Vessel.landedAt == "Runway";
+                return Vessel.situation == Vessel.Situations.PRELAUNCH;
+                //return  Vessel.GetLandedAtString(Vessel.landedAt) == "LaunchPad" || Vessel.landedAt == "Runway";
             }
         }
 
@@ -81,7 +85,7 @@ namespace CrewManifest
         private void AddCrew(Part part, ProtoCrewMember kerbal, bool fireVesselUpdate)
         {
             part.AddCrewmember(kerbal);
-            
+
             kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Assigned;
             if (kerbal.seat != null)
                 kerbal.seat.SpawnCrew();
@@ -110,12 +114,12 @@ namespace CrewManifest
             RemoveCrew(kerbal, source, false);
 
             AddCrew(target, kerbal, false);
-            
+
             // RemoveCrew works fine alone and AddCrew works fine alone, but if you combine them, it seems you must give KSP a moment to sort it all out,
             // so delay the remaining steps of the transfer process.
             ManifestBehaviour.BeginDelayedCrewTransfer(source, target, kerbal);
         }
-        
+
         private void FillVessel()
         {
             foreach (var part in CrewableParts)
@@ -181,7 +185,7 @@ namespace CrewManifest
         private Part _selectedPart;
         public Part SelectedPart
         {
-            get 
+            get
             {
                 if (_selectedPart != null && !Vessel.Parts.Contains(_selectedPart))
                     _selectedPart = null;
@@ -263,14 +267,14 @@ namespace CrewManifest
                 bool selectedPartFound = false;
                 foreach (Part part in Vessel.Parts)
                 {
-                    if(part.CrewCapacity > 0)
+                    if (part.CrewCapacity > 0)
                     {
                         _crewableParts.Add(part);
                         selectedPartFound |= part.Equals(_selectedPart);
                     }
                 }
 
-                if(!selectedPartFound)
+                if (!selectedPartFound)
                     SelectedPart = null;
 
                 return _crewableParts;
@@ -290,14 +294,14 @@ namespace CrewManifest
                 bool selectedPartSourceFound = false;
                 foreach (Part part in Vessel.Parts)
                 {
-                    if(part.CrewCapacity > 0)
+                    if (part.CrewCapacity > 0)
                     {
                         _crewablePartsSource.Add(part);
                         selectedPartSourceFound |= part.Equals(_selectedPartSource);
                     }
                 }
 
-                if(!selectedPartSourceFound)
+                if (!selectedPartSourceFound)
                     SelectedPartSource = null;
 
                 return _crewablePartsSource;
@@ -317,16 +321,16 @@ namespace CrewManifest
                 bool selectedPartTargetFound = false;
                 foreach (Part part in Vessel.Parts)
                 {
-                    if(part.CrewCapacity > 0)
+                    if (part.CrewCapacity > 0)
                     {
-                        if(!part.Equals(SelectedPartSource))
+                        if (!part.Equals(SelectedPartSource))
                             _crewablePartsTarget.Add(part);
 
                         selectedPartTargetFound |= part.Equals(_selectedPartTarget);
                     }
                 }
 
-                if(!selectedPartTargetFound)
+                if (!selectedPartTargetFound)
                     SelectedPartTarget = null;
 
                 return _crewablePartsTarget;
@@ -353,17 +357,17 @@ namespace CrewManifest
             {
                 if (ShowWindow && _showRosterWindow)
                 {
-                    ManifestBehaviour.Settings.RosterPosition = GUILayout.Window(398543, ManifestBehaviour.Settings.RosterPosition, RosterWindow, "Crew Roster", GUILayout.MinHeight(20));
+                    ManifestBehaviour.Settings.RosterPosition = ClickThruBlocker.GUILayoutWindow(398543, ManifestBehaviour.Settings.RosterPosition, RosterWindow, "Crew Roster", GUILayout.MinHeight(20));
                 }
 
                 if (ShowWindow)
                 {
-                    ManifestBehaviour.Settings.ManifestPosition = GUILayout.Window(398541, ManifestBehaviour.Settings.ManifestPosition, ManifestWindow, "Crew Manifest", GUILayout.MinHeight(20));
+                    ManifestBehaviour.Settings.ManifestPosition = ClickThruBlocker.GUILayoutWindow(398541, ManifestBehaviour.Settings.ManifestPosition, ManifestWindow, "Crew Manifest", GUILayout.MinHeight(20));
                 }
 
                 if (ShowWindow && _showTransferWindow)
                 {
-                    ManifestBehaviour.Settings.TransferPosition = GUILayout.Window(398542, ManifestBehaviour.Settings.TransferPosition, TransferWindow, "Crew Transfer", GUILayout.MinHeight(20));
+                    ManifestBehaviour.Settings.TransferPosition = ClickThruBlocker.GUILayoutWindow(398542, ManifestBehaviour.Settings.TransferPosition, TransferWindow, "Crew Transfer", GUILayout.MinHeight(20));
                 }
             }
         }
@@ -377,6 +381,9 @@ namespace CrewManifest
             partScrollViewer = GUILayout.BeginScrollView(partScrollViewer, GUILayout.Height(200), GUILayout.Width(300));
             GUILayout.BeginVertical();
 
+            Debug.Log("Crewmanifest, vessel: " + Vessel.GetDisplayName() + ", IsPreLaunch: " + IsPreLaunch +
+                ", Vessel.GetLandedAtString(Vessel.landedAt): " + Vessel.GetLandedAtString(Vessel.landedAt) +
+                ", Vessel.situation: " + Vessel.situation.ToString());
             if (IsPreLaunch)
             {
                 GUILayout.BeginHorizontal();
@@ -395,13 +402,13 @@ namespace CrewManifest
             {
                 var style = part == SelectedPart ? Resources.ButtonToggledStyle : Resources.ButtonStyle;
 
-                if (GUILayout.Button(string.Format("{0} {1}/{2}" , part.partInfo.title, part.protoModuleCrew.Count, part.CrewCapacity), style, GUILayout.Width(265)))
+                if (GUILayout.Button(string.Format("{0} {1}/{2}", part.partInfo.title, part.protoModuleCrew.Count, part.CrewCapacity), style, GUILayout.Width(265)))
                 {
                     if (SelectedPart == part)
                         SelectedPart = null;
                     else
                         SelectedPart = part;
-                    
+
                 }
             }
 
@@ -461,12 +468,12 @@ namespace CrewManifest
                     ClearHighlight(_selectedPartTarget);
                     _selectedPartSource = _selectedPartTarget = null;
                 }
-                    
+
             }
 
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            GUI.DragWindow(new Rect(0, 0, Screen.width, 30));
+            GUI.DragWindow();
         }
 
         private Vector2 partSourceScrollViewer = Vector2.zero;
@@ -565,7 +572,7 @@ namespace CrewManifest
 
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
-            GUI.DragWindow(new Rect(0, 0, Screen.width, 30));
+            GUI.DragWindow();
         }
 
         private string saveMessage = string.Empty;
@@ -642,7 +649,7 @@ namespace CrewManifest
                     GUI.enabled = false;
                     buttonText = "--";
                 }
-                
+
                 if (GUILayout.Button(buttonText, GUILayout.Width(60)))
                 {
                     if (buttonText == "Add")
@@ -708,7 +715,7 @@ namespace CrewManifest
                 if (GUILayout.Button("Apply", GUILayout.MaxWidth(50)))
                 {
                     saveMessage = SelectedKerbal.SubmitChanges();
-                    if(string.IsNullOrEmpty(saveMessage))
+                    if (string.IsNullOrEmpty(saveMessage))
                         SelectedKerbal = null;
                 }
                 GUILayout.EndHorizontal();
@@ -723,7 +730,7 @@ namespace CrewManifest
             }
 
             GUILayout.EndVertical();
-            GUI.DragWindow(new Rect(0, 0, Screen.width, 30));
+            GUI.DragWindow();
         }
 
         public void HideAllWindows()
@@ -758,7 +765,7 @@ namespace CrewManifest
             if (!part.HighlightActive)
                 part.SetHighlight(true, false);
 
-            part.highlightType = Part.HighlightType.AlwaysOn; 
+            part.highlightType = Part.HighlightType.AlwaysOn;
             part.SetHighlightColor(color);
             MonoBehaviour.print("SetPartHighlight " + color);
         }

@@ -1,0 +1,10 @@
+Changelog
+
+	Fixed flashing screen when opening crew manifest right after launching
+	New Dependencies
+		ClickThroughBlocker
+		ToolbarController
+		SpaceTuxLibrary
+	Replaced toolbar code with the ToolbarController
+	Added ClickThroughBlocker support
+	Updated the GUI.DragWindow to allow dragging from the entire window, not just the top
