@@ -5,7 +5,17 @@
       "ProjectGuid": "921e09e9-7f55-4081-9747-11005a5565f1",
       "DisplayName": "CrewManifest",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "72430cc6-9b2e-44e8-ab3c-0b9ff762cbca": {
+      "ProjectGuid": "72430cc6-9b2e-44e8-ab3c-0b9ff762cbca",
+      "DisplayName": "Solution Items",
+      "ColorIndex": 1
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 2
 }
