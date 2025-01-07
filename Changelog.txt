@@ -1,5 +1,9 @@
 Changelog
 
+6.5.1.1
+	Updated version file to use github for new version info
+	Copied web page to README.md
+
 6.5.1
 	Fixed flashing screen when opening crew manifest right after launching
 	New Dependencies

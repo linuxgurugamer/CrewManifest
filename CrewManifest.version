@@ -1,12 +1,12 @@
 {
   "NAME": "CrewManifest",
-  "URL": "http://ksp.spacetux.net/CrewManifest",
+  "URL": "https://raw.githubusercontent.com/linuxgurugamer/CrewManifest/refs/heads/master/CrewManifest.version",
   "DOWNLOAD": "https://forum.kerbalspaceprogram.com/index.php?/topic/209418-112x-kerbal-crew-manifest/",
   "VERSION": {
     "MAJOR": 6,
     "MINOR": 5,
     "PATCH": 1,
-    "BUILD": 0
+    "BUILD": 1
   },
   "KSP_VERSION": {
     "MAJOR": 1,
@@ -17,5 +17,10 @@
     "MAJOR": 1,
     "MINOR": 10,
     "PATCH": 0
+  },
+  "KSP_VERSION_MAX": {
+    "MAJOR": 1,
+    "MINOR": 12,
+    "PATCH": 99
   }
 }
