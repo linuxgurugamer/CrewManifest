@@ -1,5 +1,13 @@
 Changelog
 
+6.5.2
+	Thanks to github user @genyk1p for the following:
+		a fix for the duplicate buttons
+		A close button
+		Note:  A slightly different fix was implemented to avoid the duplicate buttons, but the close button was added as requested.
+	Fixed button color being reversed after closing the window the first time
+
+
 6.5.1.1
 	Updated version file to use github for new version info
 	Copied web page to README.md

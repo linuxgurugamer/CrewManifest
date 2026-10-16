@@ -13,12 +13,13 @@ namespace CrewManifest
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class ManifestBehaviour : MonoBehaviour
     {
+        internal static ManifestBehaviour Instance;
         public static SettingsManager Settings = new SettingsManager();
         private float interval = 30F;
         //private float intervalCrewCheck = 0.5f;
         private double crewTransferDelay = 0.25;
 
-        ToolbarControl toolbarControl;
+        static ToolbarControl toolbarControl;
 
         //private IButton button;
         //private static ApplicationLauncherButton appButton;
@@ -30,7 +31,8 @@ namespace CrewManifest
         {
             if (HighLogic.LoadedScene == GameScenes.FLIGHT)
             {
-                DontDestroyOnLoad(this);
+                Instance = this;
+                //DontDestroyOnLoad(this);
                 Settings.Load();
                 InvokeRepeating("RunSave", interval, interval);
 
@@ -93,11 +95,19 @@ namespace CrewManifest
                     appButton.SetTexture(manifestController.ShowWindow ? onTexture : offTexture);
 #endif
 
-                toolbarControl.SetTexture(manifestController.ShowWindow ? "CrewManifest/Icons/IconOff_38" : "CrewManifest/Icons/IconOn_38",
-                    manifestController.ShowWindow ? "CrewManifest/Icons/IconOff_24" : "CrewManifest/Icons/IconOn_24");
+                toolbarControl.SetTexture(manifestController.ShowWindow ? "CrewManifest/Icons/IconOn_38" : "CrewManifest/Icons/IconOff_38",
+                    manifestController.ShowWindow ? "CrewManifest/Icons/IconOn_24" : "CrewManifest/Icons/IconOff_24");
             }
         }
 
+        // Close button of the manifest window: same as the toolbar button, and the stock toolbar
+        // button is shown as off (without a callback), so the next click opens the window again.
+        internal void CloseWindow()
+        {
+            onButtonClick();
+            if (toolbarControl != null)
+                toolbarControl.SetFalse(false);
+        }
 
         public void OnDestroy()
         {

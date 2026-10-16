@@ -376,14 +376,20 @@ namespace CrewManifest
         private Vector2 partScrollViewer2 = Vector2.zero;
         private void ManifestWindow(int windowId)
         {
+            // Close button, drawn before the rest: GUI.DragWindow() at the end would take the click.
+            Rect position = ManifestBehaviour.Settings.ManifestPosition;
+            if (GUI.Button(new Rect(position.width - 21, 3, 18, 18), "×") && ManifestBehaviour.Instance != null)
+                ManifestBehaviour.Instance.CloseWindow();
+
             GUILayout.BeginVertical();
 
             partScrollViewer = GUILayout.BeginScrollView(partScrollViewer, GUILayout.Height(200), GUILayout.Width(300));
             GUILayout.BeginVertical();
 
-            Debug.Log("Crewmanifest, vessel: " + Vessel.GetDisplayName() + ", IsPreLaunch: " + IsPreLaunch +
-                ", Vessel.GetLandedAtString(Vessel.landedAt): " + Vessel.GetLandedAtString(Vessel.landedAt) +
-                ", Vessel.situation: " + Vessel.situation.ToString());
+            //Debug.Log("Crewmanifest, vessel: " + Vessel.GetDisplayName() + ", IsPreLaunch: " + IsPreLaunch +
+            //    ", Vessel.GetLandedAtString(Vessel.landedAt): " + Vessel.GetLandedAtString(Vessel.landedAt) +
+            //    ", Vessel.situation: " + Vessel.situation.ToString());
+
             if (IsPreLaunch)
             {
                 GUILayout.BeginHorizontal();
