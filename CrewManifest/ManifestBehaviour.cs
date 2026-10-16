@@ -10,9 +10,12 @@ using ClickThroughFix;
 
 namespace CrewManifest
 {
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
+    // once = true: the behaviour keeps itself alive with DontDestroyOnLoad, so with once = false
+    // KSP created one more instance (and one more toolbar button) on every flight scene load.
+    [KSPAddon(KSPAddon.Startup.Flight, true)]
     public class ManifestBehaviour : MonoBehaviour
     {
+        internal static ManifestBehaviour Instance;
         public static SettingsManager Settings = new SettingsManager();
         private float interval = 30F;
         //private float intervalCrewCheck = 0.5f;
@@ -30,6 +33,7 @@ namespace CrewManifest
         {
             if (HighLogic.LoadedScene == GameScenes.FLIGHT)
             {
+                Instance = this;
                 DontDestroyOnLoad(this);
                 Settings.Load();
                 InvokeRepeating("RunSave", interval, interval);
@@ -96,6 +100,15 @@ namespace CrewManifest
                 toolbarControl.SetTexture(manifestController.ShowWindow ? "CrewManifest/Icons/IconOff_38" : "CrewManifest/Icons/IconOn_38",
                     manifestController.ShowWindow ? "CrewManifest/Icons/IconOff_24" : "CrewManifest/Icons/IconOn_24");
             }
+        }
+
+        // Close button of the manifest window: same as the toolbar button, and the stock toolbar
+        // button is shown as off (without a callback), so the next click opens the window again.
+        internal void CloseWindow()
+        {
+            onButtonClick();
+            if (toolbarControl != null)
+                toolbarControl.SetFalse(false);
         }
 
 
